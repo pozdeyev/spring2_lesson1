@@ -15,10 +15,13 @@
 <div class="container">
     <div th:replace="~{navigation :: navigation(Profile)}" />
 
-    <h1>Профиль</h1>
+    <br>
+    <h2 h2 align="center" th:text="Профиль"></h2>
 
-    <h5 th:text="'Name: ' + ${user.firstName} + ' ' + ${user.lastName}" />
-    <h5 th:text="'Phone: ' + ${user.phone}" />
+
+
+    <h5 th:text="'Имя: ' + ${user.firstName} + ' ' + ${user.lastName}" />
+    <h5 th:text="'Телефон: ' + ${user.phone}" />
 </div>
 
 </body>

@@ -2,6 +2,7 @@ package com.geekbrains.decembermarket.utils;
 
 import com.geekbrains.decembermarket.entites.OrderItem;
 import com.geekbrains.decembermarket.entites.Product;
+import com.geekbrains.decembermarket.services.ProductService;
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -44,9 +45,11 @@ public class Cart {
     }
 
     public void removeById(Long productId) {
-        for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).getId().equals(productId)) {
+
+       for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getProduct().getId().equals(productId))  {
                 items.remove(i);
+                System.out.println(i);
                 recalculate();
                 return;
             }
