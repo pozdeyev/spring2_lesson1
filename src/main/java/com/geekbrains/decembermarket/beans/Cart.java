@@ -1,4 +1,4 @@
-package com.geekbrains.decembermarket.utils;
+package com.geekbrains.decembermarket.beans;
 
 import com.geekbrains.decembermarket.entites.OrderItem;
 import com.geekbrains.decembermarket.entites.Product;

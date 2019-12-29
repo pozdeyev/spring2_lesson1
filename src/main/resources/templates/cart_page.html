@@ -43,7 +43,7 @@
                 <td th:text="${item.quantity}"/>
                 <td th:text="${item.price}"/>
                 <td>
-                    <a class="btn btn-warning" th:href="@{'/cart/delete/' + ${item.product.id}}">
+                    <a class="btn btn-warning" th:href="@{'/cart/remove/' + ${item.product.id}}">
                         <div th:text="#{cart.delete.message}"></div>
                     </a>
                 </td>
@@ -54,7 +54,7 @@
         <span th:text="#{cart.total.cost} + ${cart.price}"/>
         <br>
         <br>
-        <a class="btn btn-primary" th:href="@{/orders/}">
+        <a class="btn btn-primary" th:href="@{/orders/info}">
             <div th:text="#{cart.order.message}"></div>
         </a>
     </div>

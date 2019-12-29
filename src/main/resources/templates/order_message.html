@@ -12,18 +12,18 @@
 <body>
 <div class="container">
     <br>
-    <h2 th:text="${order.getUser().getFirstName()}+ ','"></h2>
+    <h2 th:text="${def_name}+ ','"></h2>
     <div th:text="#{order.header.title}+ ':'"></div>
     <br>
 
-    <form th:action="@{/order_create/}" method="GET">
+    <form th:action="@{/orders/create/}" method="POST">
         <div class="input-group">
 
-            <input class="form-control" th:value="${param.address}" name="address" type="text"
+            <input class="form-control" name="address" type="text"
                    th:placeholder="#{order.delivery}"/>
 
-            <input class="form-control" th:value="${param.phone}" name="phone" type="text"
-                   th:placeholder="${order.getUser().getPhone()}"/>
+            <input class="form-control" th:value="${def_phone}" name="phone" type="text"
+                   th:placeholder="#{order.phone}"/>
         </div>
         <br>
 
@@ -44,10 +44,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="orderItem : ${order.items}">
-                    <td th:text="${orderItem.product.title}"/>
-                    <td th:text="${orderItem.quantity}"/>
-                    <td th:text="${orderItem.price}"/>
+                <tr th:each="item : ${cart.items}">
+                    <td th:text="${item.product.title}"/>
+                    <td th:text="${item.quantity}"/>
+                    <td th:text="${item.price}"/>
 
                 </tr>
                 </tbody>
@@ -57,7 +57,7 @@
                     <div th:text="#{order.total}"></div>
                 </td>
                 <td style="font-style: italic;"></td>
-                <td style="font-style: italic;" th:utext="'<b>' + ${order.price}+ '</b>'"></td>
+                <td style="font-style: italic;" th:utext="'<b>' + ${cart.price}+ '</b>'"></td>
                 </tfoot>
             </table>
 
