@@ -8,9 +8,15 @@ drop table if exists products cascade;
 create table products (id bigserial, title varchar(255), category_id bigint, description varchar(5000), price numeric(8, 2), primary key(id), constraint fk_cat_id foreign key (category_id) references categories (id));
 insert into products
 (title, category_id, description, price) values
-('Milk', 1, 'Fresh Milk', 80.0),
-('Bread', 1, 'Fresh Bread', 30.0),
-('NoteBook ASUS X1000', 2, 'Model: ASUS X1000, CPU: Xeon N700, RAM: 128 Gb, SSD: 1Tb', 25000.0);
+('banana', 1, 'big yellow', 75),
+('apple', 1, 'fresh red', 95),
+('grapefruit', 1, 'good tasty', 90),
+('lemon', 1, 'sour', 115),
+('NoteBook ASUS X1000', 2, 'Model: ASUS X1000, CPU: Xeon N700, RAM: 128 Gb, SSD: 1Tb', 25000),
+('Samsung S10', 2, 'CPU: Quallcom, RAM: 6GB', 80000),
+('Iphone 11PRO', 2, 'CPU: A13, RAM: 3GB', 85000),
+('Mi 10', 2, 'CPU: Quallcom, RAM: 8GB', 35000),
+('HTC ONE', 2, 'CPU: Mediatek, RAM: 6GB', 45000);
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
@@ -47,7 +53,7 @@ VALUES
 
 INSERT INTO users (phone, password, first_name, last_name, email)
 VALUES
-('11111111','$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i','Admin','Admin','admin@gmail.com');
+('111','$2y$12$tLpdcz.qMqWm094VFzGmWu2veXxkrDZTuq68EBJtN.sIJOA6noVZm','Admin','Student','admin@gmail.com');
 
 INSERT INTO users_roles (user_id, role_id)
 VALUES
@@ -56,7 +62,8 @@ VALUES
 (1, 3);
 
 drop table if exists orders cascade;
-create table orders (id bigserial, user_id bigint, price numeric(8, 2), primary key(id), constraint fk_user_id foreign key (user_id) references users (id));
+create table orders (id bigserial, user_id bigint, price numeric(8, 2), address varchar(5000),contact_phone varchar(128),
+primary key(id), constraint fk_user_id foreign key (user_id) references users (id));
 
 drop table if exists orders_items cascade;
 create table orders_items (id bigserial, order_id bigint, product_id bigint, quantity int, price numeric(8, 2), primary key(id), constraint fk_prod_id foreign key (product_id) references products (id), constraint fk_order_id foreign key (order_id) references orders (id));

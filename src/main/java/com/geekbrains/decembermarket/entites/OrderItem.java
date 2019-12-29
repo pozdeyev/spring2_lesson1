@@ -36,4 +36,5 @@ public class OrderItem {
         this.quantity = 1;
         this.price = product.getPrice();
     }
+
 }

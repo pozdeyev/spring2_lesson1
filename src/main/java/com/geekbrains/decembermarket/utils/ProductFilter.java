@@ -30,5 +30,16 @@ public class ProductFilter {
             spec = spec.and(ProductSpecifications.categoryIdEquals(catId));
             filterDefinition.append("&cat_id=").append(catId);
         }
+
+        if (map.containsKey("word") && !map.get("word").isEmpty()) {
+            String word = map.get("word");
+            spec = spec.and(ProductSpecifications.titleContains(word));
+            filterDefinition.append("&word=").append(word);
+        }
+
+        if (map.containsKey("sort_by") && !map.get("sort_by").isEmpty()) {
+            filterDefinition.append("&sort_by=").append(map.get("sort_by"));
+        }
+
     }
 }

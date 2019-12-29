@@ -13,7 +13,12 @@ public class ProductSpecifications {
     }
 
     public static Specification<Product> categoryIdEquals(Long catId) {
-//        return (Specification<Product>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("category"), catId); // тоже работает
         return (Specification<Product>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("category").get("id"), catId);
     }
+
+    public static Specification<Product> titleContains(String word) {
+        return (Specification<Product>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), "%" + word + "%");
+    }
+
+
 }

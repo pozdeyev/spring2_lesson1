@@ -8,18 +8,18 @@ import com.geekbrains.decembermarket.services.CategoryService;
 import com.geekbrains.decembermarket.services.OrderService;
 import com.geekbrains.decembermarket.services.ProductService;
 import com.geekbrains.decembermarket.services.UserService;
-import com.geekbrains.decembermarket.utils.Cart;
+import com.geekbrains.decembermarket.beans.Cart;
 import com.geekbrains.decembermarket.utils.ProductFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
@@ -59,14 +59,22 @@ public class MarketController {
     @GetMapping("/")
     public String index(Model model, @RequestParam Map<String, String> params) {
         int pageIndex = 0;
+        String sort = "id"; //сортировка по умолчанию
+
+
         if (params.containsKey("p")) {
             pageIndex = Integer.parseInt(params.get("p")) - 1;
         }
-        Pageable pageRequest = PageRequest.of(pageIndex, 10);
+
+        if (params.containsKey("sort_by") && !params.get("sort_by").isEmpty()) {
+            sort = params.get("sort_by");
+        }
+
+        Pageable pageRequest = PageRequest.of(pageIndex, 5, Sort.Direction.ASC, sort);
         ProductFilter productFilter = new ProductFilter(params);
         Page<Product> page = productService.findAll(productFilter.getSpec(), pageRequest);
-
         List<Category> categories = categoryService.getAll();
+
         model.addAttribute("filtersDef", productFilter.getFilterDefinition());
         model.addAttribute("categories", categories);
         model.addAttribute("page", page);
@@ -88,23 +96,5 @@ public class MarketController {
         return "redirect:/";
     }
 
-    @GetMapping("/cart/add/{id}")
-    public void addProductToCart(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        cart.add(productService.findById(id));
-        response.sendRedirect(request.getHeader("referer"));
-    }
-
-    @GetMapping("/cart")
-    public String showCart(Model model) {
-        model.addAttribute("cart", cart);
-        return "cart_page";
-    }
-
-    @GetMapping("/orders/create")
-    public String createOrder(Principal principal) {
-        User user = userService.findByPhone(principal.getName());
-        Order order = new Order(user, cart);
-        orderService.save(order);
-        return "redirect:/";
-    }
 }
+

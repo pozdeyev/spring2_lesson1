@@ -13,36 +13,55 @@
 <body>
 
 <div class="container">
-    <div th:replace="~{navigation :: navigation(Home)}" />
+    <div th:replace="~{navigation :: navigation(Home)}"/>
+    <br>
+    <h2 h2 align="center" th:text="#{header.title}"></h2>
 
-    <h1>December Market</h1>
-
-    <h3 th:text="#{filters}"></h3>
+    <h4 th:text="#{filters}"></h4>
     <form th:action="@{/}" method="GET">
         <div class="input-group">
+
+            <input class="form-control" th:value="${param.word}" name="word" type="text"
+                   th:placeholder="#{filters.word}"/>
             <input class="form-control" th:value="${param.min_price}" name="min_price" type="number"
                    th:placeholder="#{filters.price.min}"/>
             <input class="form-control" th:value="${param.max_price}" name="max_price" type="number"
                    th:placeholder="#{filters.price.max}"/>
+
+
+            <select name="sort_by">
+                <option th:selected="${(param.sort_by !=null) && ('id'==param.sort_by.toString())}"
+                        th:text="#{filters.sortbyid}" value="id"/>
+                <option th:selected="${(param.sort_by !=null) && ('price'==param.sort_by.toString())}"
+                        th:text="#{filters.sortbyprice}" value="price"/>
+                <option th:selected="${(param.sort_by !=null) && ('title'==param.sort_by.toString())}"
+                        th:text="#{filters.sortbyname}" value="title"/>
+            </select>
+
+
             <select name="cat_id">
-                <option th:text="'Не выбрана'" th:value="null"/>
-                <option th:each="c : ${categories}" th:text="${c.title}" th:selected="${param.cat_id != null && c.id.toString() == param.cat_id.toString()}"
+                <option th:text="#{filters.notselected}" th:value="null"/>
+                <option th:each="c : ${categories}" th:text="${c.title}"
+                        th:selected="${param.cat_id != null && c.id.toString() == param.cat_id.toString()}"
                         th:value="${c.id}"/>
             </select>
+
+
         </div>
         <br>
-        <button type="submit" th:text="#{filters.apply}" class="btn btn-warning"></button>
+        <button type="submit" th:text="#{filters.apply}" class="btn btn-primary"></button>
         <a class="btn btn-warning" th:href="@{'/?p=1'}" th:text="#{filters.reset}"></a>
     </form>
     <br>
     <h3 th:text="#{products.list}"></h3>
     <table class="table table-hover">
-        <thead class="thead-dark">
+        <thead class="thead-light">
         <tr>
-            <th>ID</th>
-            <th>Описание товара</th>
-            <th>Цена</th>
-            <th>Действия</th>
+
+            <th><div th:text="#{table.idname}"></div></th>
+            <th><div th:text="#{table.description}"></div></th>
+            <th><div th:text="#{table.prices}"></div></th>
+            <th><div th:text="#{table.activity}"></div></th>
         </tr>
         </thead>
         <tbody>
@@ -55,18 +74,27 @@
             </td>
             <td th:text="${product.price}"/>
             <td>
-                <a th:href="@{'/edit/' + ${product.id}}" class="btn btn-warning">Edit</a>
-                <a th:href="@{'/cart/add/' + ${product.id}}" class="btn btn-primary">Add to Cart</a>
+                <a th:href="@{'/edit/' + ${product.id}}" class="btn btn-light">
+                    <div th:text="#{activity.edit}"></div></a>
+
+                <a th:href="@{'/cart/add/' + ${product.id}}" class="btn btn-success">
+                    <div th:text="#{activity.addtocart}"></div></a>
             </td>
         </tr>
         </tbody>
     </table>
 
+    <span th:text="#{total.product} + ${page.content.size()}"/>
+
+    <br>
+    <br>
+
     <nav aria-label="Page navigation">
         <ul class="pagination">
             <li class="page-item">
                 <a class="page-link"
-                   th:href="@{'/?p='+ ${page.previousOrFirstPageable().getPageNumber() + 1} + ${filtersDef}}" th:text="#{paging.prev}"></a>
+                   th:href="@{'/?p='+ ${page.previousOrFirstPageable().getPageNumber() + 1} + ${filtersDef}}"
+                   th:text="#{paging.prev}"></a>
             </li>
             <li class="page-item" th:classappend="${page.getNumber() + 1 == i ? 'active' : ''}"
                 th:each="i : ${#numbers.sequence(1, page.getTotalPages())}">
@@ -74,7 +102,8 @@
             </li>
             <li class="page-item">
                 <a class="page-link"
-                   th:href="@{'/?p='+ ${page.nextOrLastPageable().getPageNumber() + 1} + ${filtersDef}}" th:text="#{paging.next}"></a>
+                   th:href="@{'/?p='+ ${page.nextOrLastPageable().getPageNumber() + 1} + ${filtersDef}}"
+                   th:text="#{paging.next}"></a>
             </li>
         </ul>
     </nav>
