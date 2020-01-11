@@ -23,7 +23,7 @@ CREATE TABLE users (
   id                    bigserial,
   phone                 VARCHAR(30) NOT NULL UNIQUE,
   password              VARCHAR(80),
-  email                 VARCHAR(50) UNIQUE,
+  email                 VARCHAR(50),
   first_name            VARCHAR(50),
   last_name             VARCHAR(50),
   PRIMARY KEY (id)
@@ -54,7 +54,7 @@ VALUES
 INSERT INTO users (phone, password, first_name, last_name, email)
 VALUES
 ('111','$2y$12$tLpdcz.qMqWm094VFzGmWu2veXxkrDZTuq68EBJtN.sIJOA6noVZm','Admin','Student','admin@gmail.com');
-
+-- login: 111, password: admin
 INSERT INTO users_roles (user_id, role_id)
 VALUES
 (1, 1),
