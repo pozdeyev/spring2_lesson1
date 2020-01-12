@@ -13,17 +13,24 @@
 <div class="container">
     <br>
 
-    <h2 th:text="${def_name}+ ','"></h2>
+    <h2 th:text="'Уважаемый,'"></h2>
     <div th:text="#{order.header.title}+ ':'"></div>
     <br>
 
-    <form th:action="@{/orders/create/}" method="POST">
+    <div class="form-group">
+
+        <tr th:each="error : ${errormessagelist}">
+            <div class="alert alert-danger" role="alert" th:text="${error}"/>
+        </tr>
+
+    </div>
+    <form th:action="@{/fastorders/create/}" method="POST">
         <div class="input-group">
 
             <input class="form-control" name="address" type="text"
                    th:placeholder="#{order.delivery}"/>
 
-            <input class="form-control" th:value="${def_phone}" name="phone" type="text"
+            <input class="form-control" name="phone" type="text"
                    th:placeholder="#{order.phone}"/>
         </div>
         <br>
@@ -65,7 +72,7 @@
         </div>
 
         <br>
-        <button type="submit" th:text="#{order.send.message}" class="btn btn-primary"></button>
+        <button type="submit" th:text="'Оформить быстрый заказ'" class="btn btn-primary"></button>
     </form>
 </div>
 

@@ -1,7 +1,6 @@
 package com.geekbrains.decembermarket.controllers;
 
 import com.geekbrains.decembermarket.entites.Category;
-import com.geekbrains.decembermarket.entites.Order;
 import com.geekbrains.decembermarket.entites.Product;
 import com.geekbrains.decembermarket.entites.User;
 import com.geekbrains.decembermarket.services.CategoryService;
@@ -18,9 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -30,15 +26,13 @@ public class MarketController {
     private ProductService productService;
     private CategoryService categoryService;
     private UserService userService;
-    private OrderService orderService;
-    private Cart cart;
 
-    public MarketController(ProductService productService, CategoryService categoryService, UserService userService, OrderService orderService, Cart cart) {
+
+    public MarketController(ProductService productService, CategoryService categoryService, UserService userService) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.userService = userService;
-        this.orderService = orderService;
-        this.cart = cart;
+
     }
 
     @GetMapping("/login")

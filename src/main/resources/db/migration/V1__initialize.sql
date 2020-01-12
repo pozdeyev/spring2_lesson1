@@ -23,7 +23,7 @@ CREATE TABLE users (
   id                    bigserial,
   phone                 VARCHAR(30) NOT NULL UNIQUE,
   password              VARCHAR(80),
-  email                 VARCHAR(50) UNIQUE,
+  email                 VARCHAR(50),
   first_name            VARCHAR(50),
   last_name             VARCHAR(50),
   PRIMARY KEY (id)
@@ -54,7 +54,7 @@ VALUES
 INSERT INTO users (phone, password, first_name, last_name, email)
 VALUES
 ('111','$2y$12$tLpdcz.qMqWm094VFzGmWu2veXxkrDZTuq68EBJtN.sIJOA6noVZm','Admin','Student','admin@gmail.com');
-
+-- login: 111, password: admin
 INSERT INTO users_roles (user_id, role_id)
 VALUES
 (1, 1),
@@ -66,4 +66,16 @@ create table orders (id bigserial, user_id bigint, price numeric(8, 2), address 
 primary key(id), constraint fk_user_id foreign key (user_id) references users (id));
 
 drop table if exists orders_items cascade;
-create table orders_items (id bigserial, order_id bigint, product_id bigint, quantity int, price numeric(8, 2), primary key(id), constraint fk_prod_id foreign key (product_id) references products (id), constraint fk_order_id foreign key (order_id) references orders (id));
+create table orders_items (id bigserial, order_id bigint, product_id bigint, quantity int, price numeric(8, 2),
+primary key(id), constraint fk_prod_id foreign key (product_id) references products (id),
+constraint fk_order_id foreign key (order_id) references orders (id));
+
+drop table if exists comments cascade;
+create table comments (id bigserial, product_id bigint, user_id bigint, comment varchar(10000), mark int,
+primary key(id), constraint fk_product_id foreign key (product_id) references products (id),
+constraint fk_user_id foreign key (user_id) references users (id));
+
+insert into comments
+(product_id, user_id, comment, mark) values
+(1, 1, 'Отличные свежие бананы!', 5),
+(1, 1, 'Купил второй раз, немного похуже...', 4);

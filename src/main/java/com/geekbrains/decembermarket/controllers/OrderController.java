@@ -35,11 +35,13 @@ public class OrderController {
         return "order_message";
     }
 
+
     @PostMapping("/create")
     public String createOrder(Principal principal, Model model, @RequestParam(name = "address") String address, @RequestParam("phone") String phone) {
         User user = userService.findByPhone(principal.getName());
         Order order = new Order(user, cart, address, phone);
         order = orderService.save(order);
+
         model.addAttribute("order_id_str", String.format("%04d", order.getId()));
         return "order_confirm";
     }

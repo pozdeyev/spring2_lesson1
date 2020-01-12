@@ -49,7 +49,6 @@ public class Cart {
        for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getProduct().getId().equals(productId))  {
                 items.remove(i);
-                System.out.println(i);
                 recalculate();
                 return;
             }
