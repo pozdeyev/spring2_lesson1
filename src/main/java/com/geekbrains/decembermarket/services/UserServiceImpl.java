@@ -1,9 +1,12 @@
 package com.geekbrains.decembermarket.services;
 
+import com.geekbrains.decembermarket.entites.Order;
+import com.geekbrains.decembermarket.entites.Product;
 import com.geekbrains.decembermarket.entites.Role;
 import com.geekbrains.decembermarket.entites.User;
 import com.geekbrains.decembermarket.repositories.RoleRepository;
 import com.geekbrains.decembermarket.repositories.UserRepository;
+import com.geekbrains.decembermarket.utils.OrderFilter;
 import com.geekbrains.decembermarket.utils.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +25,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,10 +34,16 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder passwordEncoder; //объект пароль/дешифровка
+    private OrderService orderService;
+    private OrderFilter orderFilter;
 
 
+    public UserServiceImpl(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
-    @Autowired
+
+        @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -51,7 +62,10 @@ public class UserServiceImpl implements UserService {
     public User findByPhone(String phone) {
         return userRepository.findOneByPhone(phone);
     }
-    public User findByEmail (String email){return userRepository.findOneByEmail(email);}
+
+    public User findByEmail(String email) {
+        return userRepository.findOneByEmail(email);
+    }
 
 
     @Override
@@ -101,15 +115,32 @@ public class UserServiceImpl implements UserService {
         String password = RandomStringUtils.random(length, useLetters, useNumbers);
 
         String encodedPass = passwordEncoder.encode(password);
-
         User fastUser = new User(username, encodedPass);
-
         userRepository.save(fastUser);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return new String[]{username, password};
-
     }
+
+    public boolean isProductCustomer (User user, Product product) {
+        Long userID = user.getId(); //id текущего пользователя
+        OrderFilter orderFilter = new OrderFilter(userID);
+        System.out.println(userID);
+        System.out.println(product.getId());
+        List<Order> order = orderService.findAllList(orderFilter.getSpec());
+      //  System.out.println(order);
+        Iterator order_iterator = order.iterator();
+
+        while (order_iterator.hasNext()) {
+            Order element = (Order) order_iterator.next();
+            System.out.println((element.getItems().contains(product)));
+            if (element.getItems().contains(product.getId())) { //если находим продукт выходим из итератора
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

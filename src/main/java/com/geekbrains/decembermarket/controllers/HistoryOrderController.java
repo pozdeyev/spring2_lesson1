@@ -35,7 +35,7 @@ public class HistoryOrderController {
         model.addAttribute("def_phone", user.getPhone());
         model.addAttribute("def_name", user.getFirstName());
 
-        Pageable pageRequest;
+
         Long id = user.getId(); //id пользователя
 
         //Заказы по userID

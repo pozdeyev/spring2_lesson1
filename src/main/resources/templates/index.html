@@ -80,8 +80,11 @@
                 <a  sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{'/edit/' + ${product.id}}" class="btn btn-light">
                     <div th:text="#{activity.edit}"></div></a>
 
+                <a th:href="@{'/product/' + ${product.id}}" class="btn btn-primary">
+                    <div th:text="'Подробнее'"></div></a>
                 <a th:href="@{'/cart/add/' + ${product.id}}" class="btn btn-success">
                     <div th:text="#{activity.addtocart}"></div></a>
+
             </td>
         </tr>
         </tbody>
