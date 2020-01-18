@@ -75,7 +75,6 @@ create table comments (id bigserial, product_id bigint, user_id bigint, comment 
 primary key(id), constraint fk_product_id foreign key (product_id) references products (id),
 constraint fk_user_id foreign key (user_id) references users (id));
 
-insert into comments
-(product_id, user_id, comment, mark) values
-(1, 1, 'Отличные свежие бананы!', 5),
-(1, 1, 'Купил второй раз, немного похуже...', 4);
+--insert into comments
+--(product_id, user_id, comment, mark) values
+--(1, 1, 'Отличные свежие бананы!', 5);

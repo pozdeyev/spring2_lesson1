@@ -1,10 +1,7 @@
 package com.geekbrains.decembermarket.controllers;
 
-import com.geekbrains.decembermarket.entites.Comment;
+import com.geekbrains.decembermarket.entites.*;
 
-import com.geekbrains.decembermarket.entites.Order;
-import com.geekbrains.decembermarket.entites.Product;
-import com.geekbrains.decembermarket.entites.User;
 import com.geekbrains.decembermarket.services.CommentService;
 
 import com.geekbrains.decembermarket.services.OrderService;
@@ -12,6 +9,7 @@ import com.geekbrains.decembermarket.services.UserService;
 import com.geekbrains.decembermarket.services.ProductService;
 import com.geekbrains.decembermarket.utils.CommentFilter;
 
+import com.geekbrains.decembermarket.utils.HistoryVisitedUtils;
 import com.geekbrains.decembermarket.utils.OrderFilter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
@@ -20,9 +18,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/product")
@@ -30,60 +33,84 @@ public class ShowProductController {
     private UserService userService;
     private ProductService productService;
     private CommentService commentService;
-    private OrderService orderService;
 
 
-    public ShowProductController(UserService userService, ProductService productService, CommentService commentService, OrderService orderService) {
+    public ShowProductController(UserService userService, ProductService productService, CommentService commentService) {
         this.userService = userService;
         this.productService = productService;
         this.commentService = commentService;
-        this.orderService = orderService;
     }
 
     @GetMapping("/{id}")
-    public String editProductForm(Model model, @PathVariable Long id,  Principal principal) {
+    public String productForm(Model model, @PathVariable Long id,
+                              @CookieValue(value = "lastProducts", required = false) String lastProducts,
+                              HttpServletResponse response, Principal principal) {
         Product product = productService.findById(id);
 
         if (principal != null) {
+
             User user = userService.findByPhone(principal.getName());
-            System.out.println("inIF**********************");
-            //Проверяем покупал ли текущий пользователь этот товар
-            if (userService.isProductCustomer(user, product)) {
-               System.out.println("isCustomer******************");
-                model.addAttribute("customer", "isCustomer");
 
-            } else {
-                System.out.println("isNotCustomer******************");
-                model.addAttribute("customer", "isNotCustomer");
+            if ((userService.isProductCustomer(user, product)) && (!userService.isProductCommentator(user, product))) {
+                model.addAttribute("customer", "isCustomer"); //можно оставить комментарий (не комментировал и покупал товар)
+
             }
+            if ((userService.isProductCustomer(user, product)) && (userService.isProductCommentator(user, product))) {
+                model.addAttribute("customer", "isAlreadyCommentCustomer"); //нельзя оставлять комментарии (уже комментировал)
 
-         //   Long userID = user.getId(); //id текущего пользователя
-       //     OrderFilter orderFilter = new OrderFilter(userID);
-      ///      System.out.println(userID);
-       //     System.out.println(product.getId());
-       //     List<Order> order = orderService.findAllList(orderFilter.getSpec());
-            //  System.out.println(order);
-       //     Iterator order_iterator = order.iterator();
+            }
+            if (!userService.isProductCustomer(user, product)) {
+                model.addAttribute("customer", "isNotCustomer"); //нельзя оставлять комментарии (не покупал)
 
-       //     while (order_iterator.hasNext()) {
-        //        Order element = (Order) order_iterator.next();
-       //         System.out.println((element.getItems().contains(product)));
-        //        if (element.getItems().contains(product)) { //если находим продукт выходим из итератор
-        //        }
-        //    }
-
+            }
         }
+
+        if (lastProducts == null) lastProducts = String.valueOf(product.getId());
+        else lastProducts = lastProducts + "q" + product.getId();
+        LinkedList<String> lastProductsIndexesList = HistoryVisitedUtils.cutVisitedProductsHistory(lastProducts, 5);
+        response.addCookie(new Cookie("lastProducts", HistoryVisitedUtils.listToString(lastProductsIndexesList)));
+        LinkedList<Product> productsList = new LinkedList<>();
+        for (String s : lastProductsIndexesList) productsList.add(productService.findById(Long.parseLong(s)));
+
 
         CommentFilter commentFilter = new CommentFilter(id);
         List<Comment> comment = commentService.findAllList(commentFilter.getSpec()); //фильтруем по продукт id
-
         model.addAttribute("comment", comment);
         model.addAttribute("product", product);
+        model.addAttribute("productsList", productsList);
+        return "product_page";
+    }
+
+    @PostMapping("/comment")
+    public String comment( Model model,  @CookieValue(value = "lastProducts", required = false) String lastProducts,
+                           HttpServletResponse response,
+                           @RequestParam String usercomment, @RequestParam String mark,
+                           @RequestParam Long productid,  Principal principal) {
+
+        User user = userService.findByPhone(principal.getName());
+        Product product = productService.findById(productid);
+
+        Comment newcomment = new Comment(product, user, usercomment, Integer.parseInt(mark.trim()));
+        newcomment = commentService.save(newcomment);
+
+        CommentFilter commentFilter = new CommentFilter(productid);
+        List<Comment> comment = commentService.findAllList(commentFilter.getSpec());
+
+        if (lastProducts == null) lastProducts = String.valueOf(product.getId());
+        else lastProducts = lastProducts + "q" + product.getId();
+        LinkedList<String> lastProductsIndexesList = HistoryVisitedUtils.cutVisitedProductsHistory(lastProducts, 5);
+        response.addCookie(new Cookie("lastProducts", HistoryVisitedUtils.listToString(lastProductsIndexesList)));
+        LinkedList<Product> productsList = new LinkedList<>();
+        for (String s : lastProductsIndexesList) productsList.add(productService.findById(Long.parseLong(s)));
 
 
-
+        model.addAttribute("product", product);
+        model.addAttribute("customer", "isAlreadyCommentCustomer");
+        model.addAttribute("comment", comment);
+        model.addAttribute("productsList", productsList);
 
         return "product_page";
     }
+
 
 }

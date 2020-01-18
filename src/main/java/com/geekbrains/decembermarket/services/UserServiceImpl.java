@@ -1,9 +1,6 @@
 package com.geekbrains.decembermarket.services;
 
-import com.geekbrains.decembermarket.entites.Order;
-import com.geekbrains.decembermarket.entites.Product;
-import com.geekbrains.decembermarket.entites.Role;
-import com.geekbrains.decembermarket.entites.User;
+import com.geekbrains.decembermarket.entites.*;
 import com.geekbrains.decembermarket.repositories.RoleRepository;
 import com.geekbrains.decembermarket.repositories.UserRepository;
 import com.geekbrains.decembermarket.utils.OrderFilter;
@@ -34,12 +31,14 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder passwordEncoder; //объект пароль/дешифровка
-    private OrderService orderService;
-    private OrderFilter orderFilter;
+
+    private ProductService productService;
+    private CommentService commentService;
 
 
-    public UserServiceImpl(OrderService orderService) {
-        this.orderService = orderService;
+    public UserServiceImpl(ProductService productService, CommentService commentService) {
+        this.productService = productService;
+        this.commentService = commentService;
     }
 
 
@@ -126,21 +125,20 @@ public class UserServiceImpl implements UserService {
 
     public boolean isProductCustomer (User user, Product product) {
         Long userID = user.getId(); //id текущего пользователя
-        OrderFilter orderFilter = new OrderFilter(userID);
-        System.out.println(userID);
-        System.out.println(product.getId());
-        List<Order> order = orderService.findAllList(orderFilter.getSpec());
-      //  System.out.println(order);
-        Iterator order_iterator = order.iterator();
-
-        while (order_iterator.hasNext()) {
-            Order element = (Order) order_iterator.next();
-            System.out.println((element.getItems().contains(product)));
-            if (element.getItems().contains(product.getId())) { //если находим продукт выходим из итератора
-                return true;
-            }
-        }
-        return false;
+        List<Product> products = productService.ProductListUserPurchasedByUserID (userID);
+        if (!products.isEmpty() & products.contains(product)) {
+            return true;
+        } else return false;
     }
 
+    public boolean isProductCommentator (User user, Product product) {
+        Long userID = user.getId(); //id текущего пользователя
+        Long productID=product.getId(); //id продукта
+        List<Comment> comments = commentService.CommentedListByUserAndProductID(userID, productID); //формируем список
+
+        // Если не пустой возвращаем
+        if (!comments.isEmpty()) {
+            return true;
+        } else return false;
+    }
 }

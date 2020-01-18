@@ -11,4 +11,5 @@ public interface UserService extends UserDetailsService {
     User save(SysUser systemUser);
     String[] fastCreateUser(String phone);
     boolean isProductCustomer(User user, Product product);
+    boolean isProductCommentator (User user, Product product);
 }

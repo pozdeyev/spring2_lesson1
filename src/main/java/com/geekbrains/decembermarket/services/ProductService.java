@@ -1,5 +1,7 @@
 package com.geekbrains.decembermarket.services;
 
+import com.geekbrains.decembermarket.entites.Order;
+import com.geekbrains.decembermarket.entites.OrderItem;
 import com.geekbrains.decembermarket.entites.Product;
 import com.geekbrains.decembermarket.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +40,10 @@ public class ProductService {
     public Product save(Product Product) {
         return productRepository.save(Product);
     }
+
+    public List<Product> ProductListUserPurchasedByUserID(Long User_id) {
+        return productRepository.ProductListByUserID(User_id);
+    }
+
+
 }

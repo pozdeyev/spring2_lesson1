@@ -1,6 +1,7 @@
 package com.geekbrains.decembermarket.services;
 
 import com.geekbrains.decembermarket.entites.Comment;
+import com.geekbrains.decembermarket.entites.Product;
 import com.geekbrains.decembermarket.repositories.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -31,5 +32,9 @@ public class CommentService {
 
     public Comment save(Comment comment) {
         return commentRepository.save(comment);
+    }
+
+    public List<Comment> CommentedListByUserAndProductID(Long user_id, Long product_id) {
+        return commentRepository.CommentedListByUserProductID(user_id,product_id);
     }
 }

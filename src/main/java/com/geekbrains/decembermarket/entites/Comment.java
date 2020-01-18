@@ -1,8 +1,10 @@
 package com.geekbrains.decembermarket.entites;
+import com.geekbrains.decembermarket.beans.Cart;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "comments")
@@ -27,4 +29,13 @@ public class Comment {
 
     @Column(name = "mark")
     private int mark;
+
+
+    public Comment(Product product, User user, String comment,  int mark) {
+        this.user = user;
+        this.product = product;
+        this.comment = comment;
+        this.mark=mark;
+
+    }
 }
