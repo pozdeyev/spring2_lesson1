@@ -1,7 +1,5 @@
 package com.geekbrains.decembermarket.services;
 
-import com.geekbrains.decembermarket.entites.Order;
-import com.geekbrains.decembermarket.entites.OrderItem;
 import com.geekbrains.decembermarket.entites.Product;
 import com.geekbrains.decembermarket.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;

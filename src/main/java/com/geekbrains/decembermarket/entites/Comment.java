@@ -1,10 +1,9 @@
 package com.geekbrains.decembermarket.entites;
-import com.geekbrains.decembermarket.beans.Cart;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+
 
 @Entity
 @Table(name = "comments")

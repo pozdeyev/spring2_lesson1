@@ -1,5 +1,6 @@
 package com.geekbrains.decembermarket.repositories;
 import com.geekbrains.decembermarket.entites.Product;
+import com.geekbrains.decembermarket.entites.ProductDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -15,5 +16,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
               "(SELECT oi.product.id FROM OrderItem oi WHERE oi.order.id in " +
               "(SELECT o.id FROM  Order o WHERE (o.user.id=:id)))")
       List<Product> ProductListByUserID(Long id);
-
+      List<ProductDto> findAllBy();
 }

@@ -14,7 +14,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class Order {
-    //private List<OrderItem> items;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

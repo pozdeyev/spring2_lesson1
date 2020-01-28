@@ -4,14 +4,12 @@ import com.geekbrains.decembermarket.entites.*;
 
 import com.geekbrains.decembermarket.services.CommentService;
 
-import com.geekbrains.decembermarket.services.OrderService;
 import com.geekbrains.decembermarket.services.UserService;
 import com.geekbrains.decembermarket.services.ProductService;
 import com.geekbrains.decembermarket.utils.CommentFilter;
 
 import com.geekbrains.decembermarket.utils.HistoryVisitedUtils;
-import com.geekbrains.decembermarket.utils.OrderFilter;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+
 import java.security.Principal;
-import java.util.Iterator;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+
 
 @Controller
 @RequestMapping("/product")

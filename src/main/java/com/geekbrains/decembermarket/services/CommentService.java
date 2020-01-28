@@ -1,7 +1,6 @@
 package com.geekbrains.decembermarket.services;
 
 import com.geekbrains.decembermarket.entites.Comment;
-import com.geekbrains.decembermarket.entites.Product;
 import com.geekbrains.decembermarket.repositories.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;

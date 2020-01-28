@@ -6,6 +6,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DecemberMarketApplication {
 
+	// Домашнее задание (lesson 3):
+	//SOAP
+
+
+
+
+
 	// Домашнее задание (lesson 2):
 	// 1. История заказов (done)
 	// 2. Добавить регистрацию с валидацией (done)
