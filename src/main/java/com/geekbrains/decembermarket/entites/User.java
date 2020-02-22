@@ -31,18 +31,27 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "email_token")
+    private String email_token;
+
+    @Column(name = "email_approve")
+    private Boolean email_approve;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
-    public User(String phone, String password, String firstName, String lastName, String email) {
+    public User(String phone, String password, String firstName, String lastName, String email,
+                String email_token, Boolean email_approve) {
         this.phone = phone;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.email_token = email_token;
+        this.email_approve = email_approve;
     }
 
     public User(String phone, String password) {

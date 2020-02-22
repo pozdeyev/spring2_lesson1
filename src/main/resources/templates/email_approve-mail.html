@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8"/>
-    <title>Profile</title>
+    <title>Email approve</title>
     <link rel="stylesheet" th:href="@{../static/css/stylesheet.css}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -13,21 +13,17 @@
 <body>
 
 <div class="container">
-    <div th:replace="~{navigation :: navigation(Profile)}" />
 
     <br>
-    <h2 h2 align="center" th:text="Профиль"></h2>
+    <h2 h2 align="center" th:text="'Подтвердите ваш адрес электронной почты'"></h2>
 
 
-    <h5 th:text="'Имя: ' + ${user.firstName} + ' ' + ${user.lastName}" />
+    <h5 th:text="'Ваше имя: ' + ${user.firstName} + ' ' + ${user.lastName}" />
     <h5 th:text="'Телефон: ' + ${user.phone}" />
     <h5 th:text="'Электронная почта:  ' + ${user.email}" />
 
-    <p th:if="${user.email_approve} == false"
-       th:text="'Ваша почта не подтверждена'"/>
+    <a th:href="@{'http://localhost:8189/market/registration/confirm/' + ${user.email_token}}"><b>Подтвердить электронную почту</b></a>
 
-    <p th:if="${user.email_approve} == true"
-       th:text="'Ваша почта подтверждена'"/>
 
 </div>
 </body>

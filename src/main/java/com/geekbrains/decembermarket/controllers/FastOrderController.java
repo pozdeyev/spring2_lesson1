@@ -63,6 +63,7 @@ public class FastOrderController {
         model.addAttribute("login", fastUser[0]);
         model.addAttribute("password", fastUser[1]);
         model.addAttribute("order_id_str", String.format("%04d", order.getId()));
+        model.addAttribute("order_id", order.getId());
         return "order_fastconfirm";
     }
 

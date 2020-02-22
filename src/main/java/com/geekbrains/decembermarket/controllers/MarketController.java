@@ -11,6 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +35,7 @@ public class MarketController {
         this.userService = userService;
 
     }
+
 
     @GetMapping("/login")
     public String loginPage() {
@@ -86,6 +90,20 @@ public class MarketController {
     public String saveProduct(@ModelAttribute(name = "product") Product product) {
         productService.save(product);
         return "redirect:/";
+    }
+
+    @GetMapping("/registration/confirm/{token}")
+    public String confirmReg(Model model, @PathVariable String token) {
+        User user = userService.findUserByToken(token);
+
+        if (user.getEmail_approve()==false) {
+            user.setEmail_approve(true);
+        }
+
+
+        userService.save_user(user);
+        model.addAttribute("user", user);
+        return "reg_approve";
     }
 
 }

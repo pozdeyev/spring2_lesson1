@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-        @Autowired
+    @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -57,10 +57,10 @@ public class UserServiceImpl implements UserService {
     public User findByPhone(String phone) {
         return userRepository.findOneByPhone(phone);
     }
-
     public User findByEmail(String email) {
         return userRepository.findOneByEmail(email);
     }
+
 
 
     @Override
@@ -94,11 +94,27 @@ public class UserServiceImpl implements UserService {
         if (systemUser.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(systemUser.getPassword()));
         }
+
         user.setFirstName(systemUser.getFirstName());
         user.setLastName(systemUser.getLastName());
         user.setEmail(systemUser.getEmail());
         user.setRoles(Arrays.asList(roleRepository.findOneByName("ROLE_CUSTOMER")));
+
+        //заполняем токен для подтверждения почты
+        user.setEmail_token(RandomStringUtils.random(6, "abcdefghijklmnopqrstuvwxyz1234567890"));
+
+        //заполняем поле подтверждения почты
+        user.setEmail_approve(false);
+
         return userRepository.save(user);
+    }
+
+    public User save_user (User user) {
+        return userRepository.save(user);
+    }
+
+    public User findUserByToken (String token) {
+        return userRepository.findByToken(token);
     }
 
     public String[] fastCreateUser(String phone) {

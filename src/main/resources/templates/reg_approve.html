@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8"/>
-    <title>Fast Order confirmation page</title>
+    <title>Registration approve information page</title>
     <link rel="stylesheet" th:href="@{../static/css/stylesheet.css}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -15,16 +15,10 @@
 <div class="container">
     <div th:replace="~{navigation :: navigation(Home)}" />
     <br>
-    <h2 align="center" th:text="'Ваш заказ #' + ${order_id_str} + ' сформирован'"></h2>
-    <p>Благодарим за покупку!</p>
-    <br>Логин: <span th:text="${login}"></span>
-    <br>Пароль: <span th:text="${password}"></span>
 
-    <br> <a th:href="@{/}">Вернуться на главную страницу</a>
+    <h2 align="center" th:text="'Ваша почта подтверждена!'"></h2>
 
     <br>
-    <a th:href="@{'/paypal/buy/' + ${order_id}}">Оплатить</a>
-</div>
+    <a th:href="@{/}">Вернуться на главную страницу</a>
 
-</body>
-</html>
+</div>
