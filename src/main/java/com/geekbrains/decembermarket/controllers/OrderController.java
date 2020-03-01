@@ -75,6 +75,10 @@ public class OrderController {
 
         model.addAttribute("order_id_str", String.format("%04d", order.getId()));
         model.addAttribute("order_id", order.getId());
+
+
+
+
         return "order_confirm";
     }
 

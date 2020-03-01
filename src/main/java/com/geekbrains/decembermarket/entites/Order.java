@@ -36,6 +36,9 @@ public class Order {
     @Column(name = "contact_phone")
     private String phone;
 
+    @Column(name = "status")
+    private String status;
+
     public Long getId() {
         return id;
     }

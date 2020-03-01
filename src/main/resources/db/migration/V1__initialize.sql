@@ -69,7 +69,7 @@ VALUES
 
 drop table if exists orders cascade;
 create table orders (id bigserial, user_id bigint, price numeric(10, 2), address varchar(5000),contact_phone varchar(128),
-primary key(id), constraint fk_user_id foreign key (user_id) references users (id));
+status varchar (30), primary key(id), constraint fk_user_id foreign key (user_id) references users (id));
 
 drop table if exists orders_items cascade;
 create table orders_items (id bigserial, order_id bigint, product_id bigint, quantity int, price numeric(8, 2),
