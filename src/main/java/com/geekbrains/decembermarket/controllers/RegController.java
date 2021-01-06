@@ -1,8 +1,7 @@
 package com.geekbrains.decembermarket.controllers;
 
-
-
 import com.geekbrains.decembermarket.entites.User;
+import com.geekbrains.decembermarket.services.MailService;
 import com.geekbrains.decembermarket.services.UserServiceImpl;
 import com.geekbrains.decembermarket.utils.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +19,12 @@ import javax.validation.Valid;
 @RequestMapping("/register")
 public class RegController {
     private UserServiceImpl userService;
+    private MailService mailService;
 
     @Autowired
-    public void setUserService(UserServiceImpl userService) {
+    public void setUserService(UserServiceImpl userService, MailService mailService) {
         this.userService = userService;
+        this.mailService = mailService;
     }
 
 //убрать пробелы
@@ -63,9 +63,16 @@ public class RegController {
             model.addAttribute("registrationError", "User with current email is exist");
             return "registration_form";
         }
-
-
         userService.save(systemUser);
+
+        //возвращаем пользователя после записи
+        User user = userService.findByPhone(systemUser.getPhone());
+
+        if (user.getEmail() != null){
+            System.out.println("отправка почта: " + user.getEmail());
+            mailService.sendApproveMail(user);
+        }
+
         return "registration_confirm";
     }
 

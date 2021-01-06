@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Email approve</title>
+    <link rel="stylesheet" th:href="@{../static/css/stylesheet.css}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <br>
+    <h2 h2 align="center" th:text="'Подтвердите ваш адрес электронной почты'"></h2>
+
+
+    <h5 th:text="'Ваше имя: ' + ${user.firstName} + ' ' + ${user.lastName}" />
+    <h5 th:text="'Телефон: ' + ${user.phone}" />
+    <h5 th:text="'Электронная почта:  ' + ${user.email}" />
+
+    <a th:href="@{'http://localhost:8189/market/registration/confirm/' + ${user.email_token}}"><b>Подтвердить электронную почту</b></a>
+
+
+</div>
+</body>
+</html>

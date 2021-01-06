@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="utf-8"/>
@@ -8,6 +9,31 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+
+    <style>
+        .table_image_big {
+            max-width:400px;
+            max-height:400px;
+            width:auto;
+            height:auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .table_image {
+            max-width:64px;
+            max-height:64px;
+            width:auto;
+            height:auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+
+    </style>
+
+
 </head>
 
 <body>
@@ -17,11 +43,15 @@
     <div th:replace="~{navigation :: navigation(Home)}"/>
 
     <br>
-    <h2 h2 align="center" th:text="'Информация о товаре'"></h2>
+    <h2 align="center" th:text="'Информация о товаре'"></h2>
 
     <br>
-    <h2 th:text="${product.getTitle()}"></h2>
-
+    <h2 align="center"th:text="${product.getTitle()}"></h2>
+    <br>
+    <div align="center">
+    <img class="table_image_big" th:src="@{'/image_repository/products/' + ${product.id} + '/image.jpg'}">
+    </div>
+    <br>
     <table class="table table-hover">
         <thead class="thead-light">
         <tr>
@@ -34,11 +64,14 @@
         <tbody>
         <tr>
             <td th:text="${product.id}"/>
+
+
             <td th:text="${product.description}"/>
             <td th:text="${product.price}"/>
             <td>
                 <a th:href="@{'/cart/add/' + ${product.id}}" class="btn btn-success">
-                    <div th:text="#{activity.addtocart}"></div></a>
+                    <div th:text="#{activity.addtocart}"></div>
+                </a>
             </td>
         </tr>
         </tbody>
@@ -64,16 +97,85 @@
             </tbody>
         </table>
     </div>
+    <br>
 
+    <p sec:authorize="isAnonymous()"
+       th:text="'Только зарегистрированные и покупавшие товар пользователи могут оставлять комментарии'"/>
+    <p th:if="${customer} == isNotCustomer"
+       th:text="'Вы не покупали данный продукт и не можете оставлять комментарии'"/>
+    <p th:if="${customer} == isAlreadyCommentCustomer"
+       th:text="'Вы уже оставляли комментарий на этот продукт'"/>
+
+    <form th:if="${customer} == isCustomer" th:action="@{/product/comment}" method="POST">
+        <div>
+            <input class="form-control" name="usercomment" type="text"
+                   th:placeholder="'Ваш комментарий'"/>
+
+            <br>
+            <div class="input-group">
+                <span th:text="'Поставьте оценку от 1 до 5: &nbsp; &nbsp;'"/>
+
+                <select name="mark">
+                    <option
+                            th:text="'1'" value="1"/>
+                    <option
+                            th:text="'2'" value="2"/>
+                    <option
+                            th:text="'3'" value="3"/>
+                    <option
+                            th:text="'4'" value="4"/>
+                    <option th:selected="'5'"
+                            th:text="'5'" value="5"/>
+                </select>
+            </div>
+            <br>
+            <button type="submit" th:text="'Комментировать'" class="btn btn-primary" name="productid"
+                    th:value="${product.id}"></button>
+        </div>
+    </form>
 
 
     <br>
 
-    <p sec:authorize="isAnonymous()" th:text="'Только зарегистрированные пользователи могут оставлять комментарии'"/>
-    <p sec:authorize th:if="${customer} == isNotCustomer" th:text="'Вы не покупали данный товар, поэтому не можете оставить свой комментарий.'"/>
+    <div th:if="${productsList.size() > 0}">
+        <h2>Последние посещенные товары</h2>
+        <table class="table table-hover">
+            <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th></th>
+                <th>Название товара</th>
+                <th>Цена</th>
+                <th>Добавить в корзину</th>
+                <th th:text="Подробнее"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="prod : ${productsList}">
+                <td th:text="${prod.id}"/>
+                <td>
+                    <img class="table_image" th:src="@{'/image_repository/products/' + ${prod.id} + '/image.jpg'}">
+                </td>
 
-    <a sec:authorize th:if="${customer} == isCustomer" href="@{'/product/comment' + ${product.id}}" class="btn btn-light">
-        <div th:text="'Комментировать...'"></div></a>
+                <td th:text="${prod.title}"/>
+                <td th:text="${prod.price}"/>
+                <td>
+                    <a th:href="@{'/cart/add/' + ${prod.id}}" class="btn btn-success">
+                        <div th:text="#{activity.addtocart}"></div>
+                    </a>
+                </td>
+
+                <td>
+                    <a th:href="@{'/product/' + ${prod.id}}" class="btn btn-primary">
+                        <div th:text="'Подробнее'"></div>
+                    </a>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 
 </div>
 </body>

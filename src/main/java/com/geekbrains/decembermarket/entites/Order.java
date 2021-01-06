@@ -14,7 +14,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class Order {
-    //private List<OrderItem> items;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +35,9 @@ public class Order {
 
     @Column(name = "contact_phone")
     private String phone;
+
+    @Column(name = "status")
+    private String status;
 
     public Long getId() {
         return id;
@@ -80,7 +82,6 @@ public class Order {
     public String getPhone() {
         return phone;
     }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -98,5 +99,15 @@ public class Order {
         cart.clear();
     }
 
-
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", user=" + user +
+                ", items=" + items +
+                ", price=" + price +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
 }

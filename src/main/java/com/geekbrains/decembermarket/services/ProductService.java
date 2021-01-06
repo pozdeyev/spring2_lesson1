@@ -38,4 +38,10 @@ public class ProductService {
     public Product save(Product Product) {
         return productRepository.save(Product);
     }
+
+    public List<Product> ProductListUserPurchasedByUserID(Long User_id) {
+        return productRepository.ProductListByUserID(User_id);
+    }
+
+
 }

@@ -21,6 +21,9 @@
     <br>Пароль: <span th:text="${password}"></span>
 
     <br> <a th:href="@{/}">Вернуться на главную страницу</a>
+
+    <br>
+    <a th:href="@{'/paypal/buy/' + ${order_id}}">Оплатить</a>
 </div>
 
 </body>

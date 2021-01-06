@@ -32,4 +32,8 @@ public class CommentService {
     public Comment save(Comment comment) {
         return commentRepository.save(comment);
     }
+
+    public List<Comment> CommentedListByUserAndProductID(Long user_id, Long product_id) {
+        return commentRepository.CommentedListByUserProductID(user_id,product_id);
+    }
 }

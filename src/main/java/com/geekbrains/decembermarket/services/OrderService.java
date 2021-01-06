@@ -4,8 +4,6 @@ import com.geekbrains.decembermarket.entites.Order;
 import com.geekbrains.decembermarket.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +34,6 @@ public class OrderService {
     public Order findById(Long id) {
         return orderRepository.findById(id).get();
     }
-
 
 
     public Order save(Order order) {
